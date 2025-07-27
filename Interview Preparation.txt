@@ -1,0 +1,608 @@
+1. Find the Maximum Element in Array
+import java.util.Arrays;
+
+public class MaxInArray {
+    public static void main(String[] args) {
+        int[] arr = {3, 9, 2, 7, 6};
+        int max = Arrays.stream(arr).max().getAsInt();
+        System.out.println("Max: " + max);
+    }
+}
+
+2. Find the Minimum Element in Array
+
+import java.util.Arrays;
+
+public class MinInArray {
+    public static void main(String[] args) {
+        int[] arr = {3, 9, 2, 7, 6};
+        int min = Arrays.stream(arr).min().getAsInt();
+        System.out.println("Min: " + min);
+    }
+}
+3. Sum of All Elements
+import java.util.Arrays;
+
+public class SumOfArray {
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4, 5};
+        int sum = Arrays.stream(arr).sum();
+        System.out.println("Sum: " + sum);
+    }
+}
+
+4. Average of Array Elements
+
+import java.util.Arrays;
+
+public class AverageOfArray {
+    public static void main(String[] args) {
+        int[] arr = {10, 20, 30, 40, 50};
+        double avg = Arrays.stream(arr).average().orElse(0.0);
+        System.out.println("Average: " + avg);
+    }
+}
+
+
+5. Remove Duplicate Elements from Array
+--------------------------------------------
+
+import java.util.Arrays;
+
+public class RemoveDuplicates {
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 2, 3, 4, 4, 5};
+        int[] distinct = Arrays.stream(arr).distinct().toArray();
+        System.out.println("Distinct: " + Arrays.toString(distinct));
+    }
+}
+
+
+-----------------------------------
+6. Sort the Array
+
+import java.util.Arrays;
+
+public class SortArray {
+    public static void main(String[] args) {
+        int[] arr = {5, 3, 8, 1, 2};
+        int[] sorted = Arrays.stream(arr).sorted().toArray();
+        System.out.println("Sorted: " + Arrays.toString(sorted));
+    }
+}
+
+7.Count Frequency of Each Element
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class FrequencyCount {
+    public static void main(String[] args) {
+        Integer[] arr = {1, 2, 2, 3, 1, 4, 4, 4};
+        Map<Integer, Long> freqMap = Arrays.stream(arr)
+            .collect(Collectors.groupingBy(e -> e, Collectors.counting()));
+
+        System.out.println("Frequency: " + freqMap);
+    }
+}
+
+Output: Frequency: {1=2, 2=2, 3=1, 4=3}
+
+8. Find Even and Odd Numbers Separately
+
+import java.util.Arrays;
+
+public class EvenOddSplit {
+    public static void main(String[] args) {
+        int[] arr = {1, 2, 3, 4, 5, 6};
+        
+        System.out.print("Even: ");
+        Arrays.stream(arr).filter(n -> n % 2 == 0).forEach(n -> System.out.print(n + " "));
+
+        System.out.print("\nOdd: ");
+        Arrays.stream(arr).filter(n -> n % 2 != 0).forEach(n -> System.out.print(n + " "));
+    }
+}
+
+Output ::
+
+Even: 2 4 6 
+Odd: 1 3 5
+
+9. Find Second Highest Element
+
+import java.util.Arrays;
+
+public class SecondHighest {
+    public static void main(String[] args) {
+        int[] arr = {3, 5, 1, 9, 7};
+        int secondMax = Arrays.stream(arr)
+            .boxed()
+            .sorted((a, b) -> b - a)
+            .distinct()
+            .skip(1)
+            .findFirst()
+            .orElse(Integer.MIN_VALUE);
+
+        System.out.println("Second Max: " + secondMax);
+    }
+}
+
+10. Check if Array Contains a Given Value
+
+import java.util.Arrays;
+
+public class ContainsValue {
+    public static void main(String[] args) {
+        int[] arr = {2, 4, 6, 8, 10};
+        int search = 6;
+
+        boolean exists = Arrays.stream(arr).anyMatch(n -> n == search);
+        System.out.println("Array contains " + search + ": " + exists);
+    }
+}
+
+import java.util.Arrays;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+=========================================
+String 
+========================================
+
+1. Count Occurrences of Each Character
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class CharFrequency {
+    public static void main(String[] args) {
+        String input = "interview";
+        Map<Character, Long> freq = input.chars()
+            .mapToObj(c -> (char) c)
+            .collect(Collectors.groupingBy(c -> c, Collectors.counting()));
+
+        System.out.println("Character Frequency: " + freq);
+    }
+}
+
+
+2. Count Vowels and Consonants
+
+import java.util.*;
+import java.util.stream.*;
+
+public class VowelConsonantCount {
+    public static void main(String[] args) {
+        String input = "Java8Interview";
+        long vowels = input.toLowerCase().chars()
+            .filter(c -> "aeiou".indexOf(c) != -1).count();
+        long consonants = input.chars()
+            .filter(Character::isLetter)
+            .count() - vowels;
+
+        System.out.println("Vowels: " + vowels);
+        System.out.println("Consonants: " + consonants);
+    }
+}
+
+3. Check if Two Strings Are Anagrams
+import java.util.Arrays;
+
+public class AnagramCheck {
+    public static void main(String[] args) {
+        String s1 = "listen", s2 = "silent";
+
+        boolean isAnagram = Arrays.equals(
+            s1.chars().sorted().toArray(),
+            s2.chars().sorted().toArray()
+        );
+
+        System.out.println("Anagram: " + isAnagram);
+    }
+}
+
+Output: Anagram: true
+
+4. Reverse Each Word in a Sentence
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+public class ReverseEachWord {
+    public static void main(String[] args) {
+        String sentence = "Java 8 is powerful";
+
+        String reversed = Arrays.stream(sentence.split(" "))
+            .map(word -> new StringBuilder(word).reverse().toString())
+            .collect(Collectors.joining(" "));
+
+        System.out.println("Reversed: " + reversed);
+    }
+}
+
+Output: avaJ 8 si lufrewop
+
+5. Find Duplicate Characters
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class DuplicateChars {
+    public static void main(String[] args) {
+        String input = "programming";
+        Map<Character, Long> duplicates = input.chars()
+            .mapToObj(c -> (char) c)
+            .collect(Collectors.groupingBy(c -> c, Collectors.counting()));
+
+        duplicates.entrySet().stream()
+            .filter(e -> e.getValue() > 1)
+            .forEach(e -> System.out.println(e.getKey() + ": " + e.getValue()));
+    }
+}
+
+r: 2  
+g: 2  
+m: 2
+
+6. Remove Duplicates from String
+
+import java.util.LinkedHashSet;
+import java.util.stream.Collectors;
+
+public class RemoveDuplicates {
+    public static void main(String[] args) {
+        String input = "banana";
+
+        String result = input.chars()
+            .mapToObj(c -> (char) c)
+            .collect(Collectors.toCollection(LinkedHashSet::new))
+            .stream().map(String::valueOf)
+            .collect(Collectors.joining());
+
+        System.out.println("Without Duplicates: " + result);
+    }
+}
+
+7. Check Palindrome
+
+public class SimplePalindrome {
+    public static void main(String[] args) {
+        String str = "madam";
+        String reversed = new StringBuilder(str).reverse().toString();
+
+        if (str.equals(reversed)) {
+            System.out.println(str + " is a palindrome.");
+        } else {
+            System.out.println(str + " is not a palindrome.");
+        }
+    }
+}
+
+class Geeks
+{
+   
+    static int reversNumber(int n)
+    {
+        int reversed_n = 0;
+        while (n > 0) {
+            reversed_n = reversed_n * 10 + n % 10;
+            n = n / 10;
+        }
+        return reversed_n;
+    }
+
+    // Main function
+    public static void main(String[] args)
+    {
+        int n = 123464321;
+        int reverseN = reversNumber(n);
+        System.out.println("Reverse of n = " + reverseN);
+
+      
+        if (n == reverseN)
+            System.out.println("Palindrome = Yes");
+        else
+            System.out.println("Palindrome = No");
+    }
+}
+
+8. Find First Non-Repeating Character
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class FirstNonRepeating {
+    public static void main(String[] args) {
+        String str = "swiss";
+
+        Optional<Character> result = str.chars()
+            .mapToObj(c -> (char) c)
+            .collect(Collectors.groupingBy(c -> c, LinkedHashMap::new, Collectors.counting()))
+            .entrySet().stream()
+            .filter(e -> e.getValue() == 1)
+            .map(Map.Entry::getKey)
+            .findFirst();
+
+        System.out.println("First Non-Repeating: " + result.orElse(null));
+    }
+}
+
+9. Join Strings with a Delimiter
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+public class JoinStrings {
+    public static void main(String[] args) {
+        String[] names = {"Alice", "Bob", "Charlie"};
+        String result = Arrays.stream(names)
+            .collect(Collectors.joining(", "));
+
+        System.out.println("Joined: " + result);
+    }
+}
+
+Output: Joined: Alice, Bob, Charlie
+
+10. Convert String to Uppercase Without Using toUpperCase()
+import java.util.stream.Collectors;
+
+public class CustomUppercase {
+    public static void main(String[] args) {
+        String input = "java8";
+
+        String upper = input.chars()
+            .mapToObj(c -> Character.toString((char) (Character.isLowerCase(c) ? c - 32 : c)))
+            .collect(Collectors.joining());
+
+        System.out.println("Uppercase: " + upper);
+    }
+}
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class ReverseWordsJava8 {
+    public static void main(String[] args) {
+        String message = "my name is Durgeshkumar";
+
+        String reversed = Arrays.stream(message.split(" "))
+                .collect(Collectors.collectingAndThen(Collectors.toList(), list -> {
+                    Collections.reverse(list);
+                    return list.stream();
+                }))
+                .collect(Collectors.joining(" "));
+
+        System.out.println("Reversed: " + reversed);
+    }
+}
+Reversed: Durgeshkumar is name my
+
+String message ="I love java and pragramming"
+
+from this string count the space &  number of occurance of letter in alphabet order count
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class LetterAndSpaceCount {
+    public static void main(String[] args) {
+        String message = "I love java and pragramming";
+
+        // Count spaces
+        long spaceCount = message.chars()
+            .filter(ch -> ch == ' ')
+            .count();
+
+        // Count letter occurrences (case-insensitive, skip spaces)
+        Map<Character, Long> letterFrequency = message.toLowerCase().chars()
+            .filter(Character::isLetter)
+            .mapToObj(c -> (char) c)
+            .collect(Collectors.groupingBy(c -> c, TreeMap::new, Collectors.counting()));
+
+        // Output
+        System.out.println("Number of spaces: " + spaceCount);
+        System.out.println("Letter frequencies (alphabetical):");
+        letterFrequency.forEach((ch, count) -> 
+            System.out.println(ch + " : " + count));
+    }
+}
+
+=============================================
+Java Code – Manual Version (No Stream API)
+=============================================
+
+import java.util.*;
+
+public class ManualLetterAndSpaceCount {
+    public static void main(String[] args) {
+        String message = "I love java and pragramming";
+
+        // Convert to lowercase for uniform letter counting
+        message = message.toLowerCase();
+
+        int spaceCount = 0;
+        int[] alphabetCount = new int[26]; // index 0 for 'a', 1 for 'b', ..., 25 for 'z'
+
+        for (int i = 0; i < message.length(); i++) {
+            char ch = message.charAt(i);
+
+            if (ch == ' ') {
+                spaceCount++;
+            } else if (ch >= 'a' && ch <= 'z') {
+                alphabetCount[ch - 'a']++;
+            }
+        }
+
+        // Output
+        System.out.println("Number of spaces: " + spaceCount);
+        System.out.println("Letter frequencies (alphabetical):");
+
+        for (int i = 0; i < 26; i++) {
+            if (alphabetCount[i] > 0) {
+                char letter = (char) (i + 'a');
+                System.out.println(letter + " : " + alphabetCount[i]);
+            }
+        }
+    }
+}
+
+=====================================================================================
+
+import java.util.Map;
+import java.util.TreeMap;
+
+public class ManualLetterCount {
+    public static void main(String[] args) {
+        String message = "I love java and pragramming";
+        int spaceCount = 0;
+
+        // TreeMap maintains alphabetical order
+        Map<Character, Integer> letterCountMap = new TreeMap<>();
+
+        // Convert to lowercase for case-insensitive counting
+        message = message.toLowerCase();
+
+        for (int i = 0; i < message.length(); i++) {
+            char ch = message.charAt(i);
+
+            if (ch == ' ') {
+                spaceCount++;
+            } else if (ch >= 'a' && ch <= 'z') { // Only consider alphabets
+                if (letterCountMap.containsKey(ch)) {
+                    letterCountMap.put(ch, letterCountMap.get(ch) + 1);
+                } else {
+                    letterCountMap.put(ch, 1);
+                }
+            }
+        }
+
+        // Output results
+        System.out.println("Number of spaces: " + spaceCount);
+        System.out.println("Letter frequencies (alphabetical):");
+        for (Map.Entry<Character, Integer> entry : letterCountMap.entrySet()) {
+            System.out.println(entry.getKey() + " : " + entry.getValue());
+        }
+    }
+}
+
+
+Test case
+========================
+
+import java.util.Map;
+import java.util.TreeMap;
+
+public class ManualLetterCount {
+    public static void main(String[] args) {
+        String message = "I love java and pragramming";
+        int spaceCount = 0;
+
+        // TreeMap maintains alphabetical order
+        Map<Character, Integer> letterCountMap = new TreeMap<>();
+
+        // Convert to lowercase for case-insensitive counting
+        message = message.toLowerCase();
+
+        for (int i = 0; i < message.length(); i++) {
+            char ch = message.charAt(i);
+
+            if (ch == ' ') {
+                spaceCount++;
+            } else if (ch >= 'a' && ch <= 'z') { // Only consider alphabets
+                if (letterCountMap.containsKey(ch)) {
+                    letterCountMap.put(ch, letterCountMap.get(ch) + 1);
+                } else {
+                    letterCountMap.put(ch, 1);
+                }
+            }
+        }
+
+        // Output results
+        System.out.println("Number of spaces: " + spaceCount);
+        System.out.println("Letter frequencies (alphabetical):");
+        for (Map.Entry<Character, Integer> entry : letterCountMap.entrySet()) {
+            System.out.println(entry.getKey() + " : " + entry.getValue());
+        }
+    }
+}
+
+
+package com.example.text;
+
+import org.junit.jupiter.api.Test;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public class TextAnalyzerTest {
+
+    @Test
+    void testAnalyze_withMixedSentence() {
+        TextAnalyzer analyzer = new TextAnalyzer();
+        String input = "I love java and pragramming";
+
+        TextAnalyzer.AnalysisResult result = analyzer.analyze(input);
+
+        // Validate space count
+        assertEquals(4, result.spaceCount);
+
+        // Validate selected letter frequencies
+        Map<Character, Integer> freq = result.letterFrequency;
+
+        assertEquals(4, freq.get('a'));
+        assertEquals(2, freq.get('g'));
+        assertEquals(2, freq.get('m'));
+        assertEquals(2, freq.get('i'));
+        assertEquals(1, freq.get('j'));
+        assertEquals(1, freq.get('d'));
+        assertEquals(1, freq.get('e'));
+        assertEquals(2, freq.get('n'));
+        assertEquals(2, freq.get('r'));
+        assertEquals(2, freq.get('v'));
+
+        // Validate alphabetical ordering
+        assertTrue(freq.keySet().stream().sorted().toList().equals(freq.keySet().stream().toList()));
+    }
+
+    @Test
+    void testAnalyze_withEmptyString() {
+        TextAnalyzer analyzer = new TextAnalyzer();
+        String input = "";
+
+        TextAnalyzer.AnalysisResult result = analyzer.analyze(input);
+        assertEquals(0, result.spaceCount);
+        assertTrue(result.letterFrequency.isEmpty());
+    }
+
+    @Test
+    void testAnalyze_withOnlySpaces() {
+        TextAnalyzer analyzer = new TextAnalyzer();
+        String input = "     ";
+
+        TextAnalyzer.AnalysisResult result = analyzer.analyze(input);
+        assertEquals(5, result.spaceCount);
+        assertTrue(result.letterFrequency.isEmpty());
+    }
+
+    @Test
+    void testAnalyze_withAllSameLetter() {
+        TextAnalyzer analyzer = new TextAnalyzer();
+        String input = "aaaAAA";
+
+        TextAnalyzer.AnalysisResult result = analyzer.analyze(input);
+        assertEquals(0, result.spaceCount);
+        assertEquals(1, result.letterFrequency.size());
+        assertEquals(6, result.letterFrequency.get('a'));
+    }
+}
+
+Input : my name is Durgeshkumar 
+output : Durgeshkumar is name my
+
+String message ="my name is Durgeshkumar";
+
+reverse using java 8

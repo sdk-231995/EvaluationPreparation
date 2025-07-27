@@ -1,0 +1,217 @@
+First Non-Repeating Character Without Map
+
+public class FirstUniqueChar {
+    public static char firstNonRepeatingChar(String input) {
+        int[] count = new int[256];
+        for (char c : input.toCharArray()) count[c]++;
+        for (char c : input.toCharArray()) {
+            if (count[c] == 1) return c;
+        }
+        return '\0';
+    }
+
+    public static void main(String[] args) {
+        System.out.println(firstNonRepeatingChar("teeter")); // r
+    }
+}
+
+
+Reverse Words in Sentence Without split()
+
+public class ReverseWordsManual {
+    public static String reverseWords(String sentence) {
+        StringBuilder sb = new StringBuilder();
+        int end = sentence.length(), i;
+        for (i = sentence.length() - 1; i >= 0; i--) {
+            if (sentence.charAt(i) == ' ') {
+                sb.append(sentence.substring(i + 1, end)).append(" ");
+                end = i;
+            }
+        }
+        sb.append(sentence.substring(0, end));
+        return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(reverseWords("Java is best")); // best is Java
+    }
+}
+
+
+Count Words Without split()
+
+public class WordCountManual {
+    public static int countWords(String input) {
+        int count = 0;
+        boolean isWord = false;
+        for (int i = 0; i < input.length(); i++) {
+            if (Character.isLetter(input.charAt(i))) {
+                if (!isWord) {
+                    count++;
+                    isWord = true;
+                }
+            } else {
+                isWord = false;
+            }
+        }
+        return count;
+    }
+
+    public static void main(String[] args) {
+										0		1		2
+        System.out.println(countWords("Java   is   awesome")); // 3
+    }
+}
+
+Frequency of Characters Using Java 8 Streams
+
+import java.util.*;
+import java.util.stream.*;
+
+public class FrequencyWithStream {
+    public static Map<Character, Long> frequency(String input) {
+        return input.chars()
+                .mapToObj(c -> (char) c)
+                .filter(Character::isLetter)
+                .collect(Collectors.groupingBy(c -> c, LinkedHashMap::new, Collectors.counting()));
+    }
+
+    public static void main(String[] args) {
+        System.out.println(frequency("apple")); // {a=1, p=2, l=1, e=1}
+    }
+}
+
+
+1. Banking: Mask Sensitive Data (PAN, Aadhar, etc.)
+Problem: Mask all but the last 4 digits of a PAN or account number in logs.
+
+public class DataMasker {
+    public static String maskAccount(String account) {
+        if (account == null || account.length() <= 4) return account;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < account.length() - 4; i++) {
+            sb.append('X');
+        }
+        sb.append(account.substring(account.length() - 4));
+        return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        System.out.println(maskAccount("123456789012")); // XXXXXXXX9012
+    }
+}
+
+ 2. E-Commerce: Extract Order ID from Email Template
+Problem: Extract order ID from email string like:
+
+"Dear Customer, your Order ID is ORD12345678 placed on 2025-07-25."
+
+public class OrderExtractor {
+    public static String extractOrderId(String message) {
+        int start = message.indexOf("ORD");
+        if (start == -1) return null;
+        int end = start + 3;
+        while (end < message.length() && Character.isDigit(message.charAt(end))) {
+            end++;
+        }
+        return message.substring(start, end);
+    }
+
+    public static void main(String[] args) {
+        String msg = "Dear Customer, your Order ID is ORD12345678 placed on 2025-07-25.";
+        System.out.println(extractOrderId(msg)); // ORD12345678
+    }
+}
+
+3. Microservices: Parse and Filter JSON Logs for Error Code
+Problem: From a string log entry, extract the error code and message if present.
+
+public class LogParser {
+    public static String extractError(String log) {
+        if (!log.contains("\"status\":\"ERROR\"")) return "OK";
+        int msgStart = log.indexOf("\"message\":\"") + 10;
+        int msgEnd = log.indexOf("\"", msgStart);
+        return log.substring(msgStart, msgEnd);
+    }
+
+    public static void main(String[] args) {
+        String log = "{\"timestamp\":\"2025-07-26T10:00:00Z\",\"status\":\"ERROR\",\"message\":\"Invalid Account\"}";
+        System.out.println(extractError(log)); // Invalid Account
+    }
+}
+
+4. Banking: Validate IFSC Code Format
+Problem: Check if a string is a valid IFSC code (e.g., SBIN0001234).
+
+public class IFSCValidator {
+    public static boolean isValidIFSC(String code) {
+        return code.matches("^[A-Z]{4}0[A-Z0-9]{6}$");
+    }
+
+    public static void main(String[] args) {
+        System.out.println(isValidIFSC("SBIN0001234")); // true
+    }
+}
+
+5. E-Commerce: Generate SEO URL Slug from Product Name
+Problem: Turn "Sony 55-Inch 4K Smart TV" into "sony-55-inch-4k-smart-tv"
+
+public class SlugGenerator {
+    public static String generateSlug(String title) {
+        return title.toLowerCase().replaceAll("[^a-z0-9]+", "-").replaceAll("-{2,}", "-").replaceAll("^-|-$", "");
+    }
+
+    public static void main(String[] args) {
+        System.out.println(generateSlug("Sony 55-Inch 4K Smart TV")); // sony-55-inch-4k-smart-tv
+    }
+	
+}
+
+6. Microservices: Check API Request Signature (HMAC Simulated)
+Problem: Check if API request contains correct signature at end.
+
+public class SignatureValidator {
+    public static boolean isValidSignature(String request, String expectedHash) {
+        String payload = request.substring(0, request.lastIndexOf("|"));
+        String signature = request.substring(request.lastIndexOf("|") + 1);
+        return signature.equals(generateSimpleHash(payload)) && signature.equals(expectedHash);
+    }
+
+    private static String generateSimpleHash(String str) {
+        int hash = 7;
+        for (char c : str.toCharArray()) {
+            hash = hash * 31 + c;
+        }
+        return Integer.toHexString(hash);
+    }
+
+    public static void main(String[] args) {
+        String data = "user=abc|txn=7890|cf3e0b4c";
+        System.out.println(isValidSignature(data, "cf3e0b4c")); // true/false
+    }
+}
+
+
+7.Banking: Detect Suspicious Transaction Patterns in Strings
+Problem: Find if logs contain consecutive failed OTP attempts.
+
+public class SuspiciousTransactionDetector {
+    public static boolean detectConsecutiveFails(String log) {
+        String[] lines = log.split("\n");
+        int failCount = 0;
+        for (String line : lines) {
+            if (line.contains("OTP_FAILED")) failCount++;
+            else failCount = 0;
+
+            if (failCount >= 3) return true;
+        }
+        return false;
+    }
+
+    public static void main(String[] args) {
+        String logs = "OTP_SUCCESS\nOTP_FAILED\nOTP_FAILED\nOTP_FAILED\nOTP_SUCCESS";
+        System.out.println(detectConsecutiveFails(logs)); // true
+    }
+}
+
+
