@@ -1,0 +1,207 @@
+Java 8 Stream Intermediate And Terminal Operations
+Intermediate Operations :
+
+map(), filter(), distinct(), sorted(), limit(), skip()
+
+Terminal Operations :
+
+forEach(), toArray(), reduce(), collect(), min(), max(), count(), anyMatch(), allMatch(), noneMatch(), findFirst(), findAny()
+
+Java 8 map() And flatMap()
+
+List<Institute> instituteList = new ArrayList<>();
+         
+instituteList.add(new Institute("IIM", Arrays.asList("Bangalore", "Ahmedabad", "Kozhikode", "Lucknow")));
+instituteList.add(new Institute("IIT", Arrays.asList("Delhi", "Mumbai", "Kharagpur")));
+instituteList.add(new Institute("NIFT", Arrays.asList("Hyderabad", "Mumbai", "Patna", "Bangalore")));
+
+//Java 8 Map() : Get names of all institutes
+It processes stream of values.
+It is a One-To-One mapping.
+         
+List<String> namesOfInstitutes = instituteList.stream().map(Institute::getName).collect(Collectors.toList());
+[IIM, IIT, NIFT]
+
+//Java 8 FlatMap() : Get unique locations of all institutes
+It processes stream of stream of values.
+It is a One-To-Many mapping.
+         
+Set<String> locationsOfInstitutes = instituteList.stream().flatMap(institute -> institute.getLocations().stream()).collect(Collectors.toSet());
+
+[Ahmedabad, Lucknow, Delhi, Patna, Kozhikode, Kharagpur, Mumbai, Hyderabad, Bangalore]
+
+Parallel Execution
+To gain the performance while processing the large amount of data, you have to process it in parallel and use multi core architectures. Java 8 Streams can be processed in parallel without writing any multi threaded code.
+
+List<String> names = new ArrayList<>();
+         
+names.add("David");
+         
+names.add("Johnson");
+         
+names.add("Samontika");
+         
+names.add("Brijesh");
+         
+names.add("John"); 
+         
+//Normal Execution
+         
+names.stream().filter((String name) -> name.length() > 5).skip(2).forEach(System.out::println);
+         
+//Parallel Execution
+         
+names.parallelStream().filter((String name) -> name.length() > 5).skip(2).forEach(System.out::println);
+
+
+Short Circuiting Operations
+Short circuiting operations are the operations which don’t need the whole stream to be processed to produce a result. For example – findFirst(), findAny(), limit() etc.
+
+https://javaconceptoftheday.com/java-8-streams-beginners-guide/
+https://javaconceptoftheday.com/java-8-lambda-expressions/
+https://blog.devgenius.io/java-8-coding-and-programming-interview-questions-and-answers-62512c44f062
+
+
+String message="I love Java Pragramming and develop applicationn";
+
+count the space in this string using java 8
+--------------------------------------------
+ String message = "I love Java Pragramming and develop applicationn";
+
+        long spaceCount = message.chars()
+                .filter(ch -> ch == ' ')
+                .count();
+
+        System.out.println("Number of spaces: " + spaceCount);
+------------------------------------------------------------------
+		
+		Count Occurrences of Each Word
+		Map<String, Long> wordCount = Arrays.stream(input.split(" "))
+        .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+		System.out.println(wordCount);
+		
+		count the word in this string using java 8
+		long wordCount = Arrays.stream(message.trim().split("\\s+"))
+                .filter(word -> !word.isEmpty())
+                .count();
+				
+message.trim() – Removes leading/trailing spaces
+
+.split("\\s+") – Splits by one or more whitespace characters
+
+Arrays.stream(...) – Converts to a Stream
+
+======================================================
+count the occurance of each letter in this string using java 8
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+public class LetterFrequencyJava8 {
+    public static void main(String[] args) {
+        String message = "I love Java Pragramming and develop applicationn";
+
+        Map<Character, Long> letterFrequency = message.toLowerCase()
+                .chars()
+                .filter(Character::isLetter) // Only count letters, ignore spaces, digits, etc.
+                .mapToObj(c -> (char) c)
+                .collect(Collectors.groupingBy(Function.identity(), TreeMap::new, Collectors.counting()));
+
+        letterFrequency.forEach((k, v) -> System.out.println(k + " : " + v));
+    }
+}
+
+
+
+
+Convert List of Strings to Uppercase
+List<String> names = Arrays.asList("java", "kafka", "spring");
+
+List<String> upper = names.stream()
+        .map(String::toUpperCase)
+        .collect(Collectors.toList());
+
+System.out.println(upper);  // [JAVA, KAFKA, SPRING]
+
+Find Max Salary Employee
+Optional<Employee> maxSalaryEmp = employees.stream()
+        .max(Comparator.comparing(Employee::getSalary));
+		
+ Join Strings with Delimiter
+
+		 List<String> techs = Arrays.asList("Kafka", "Java", "Spring");
+
+String joined = techs.stream()
+        .collect(Collectors.joining(", "));
+
+System.out.println(joined); // Kafka, Java, Spring
+
+
+
+
+Sum of All Numbers in List
+int sum = numbers.stream()
+        .mapToInt(Integer::intValue)
+        .sum();
+
+FlatMap Example – Convert List of Lists to Single List
+List<List<String>> nested = Arrays.asList(
+    Arrays.asList("A", "B"),
+    Arrays.asList("C", "D")
+);
+
+List<String> flat = nested.stream()
+        .flatMap(Collection::stream)
+        .collect(Collectors.toList());
+
+System.out.println(flat); // [A, B, C, D]
+
+
+Java 8 Code to Reverse a String using Streams
+String message = "I love Java Pragramming and develop applicationn";
+
+        String reversed = new StringBuilder(message)
+                .reverse()
+                .toString();
+				
+				
+				import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+public class ReverseStringStream {
+    public static void main(String[] args) {
+        String message = "I love Java Pragramming and develop applicationn";
+
+        String reversed = IntStream.range(0, message.length())                 // create a stream of indices
+                .mapToObj(i -> message.charAt(message.length() - 1 - i))      // get char from end to start
+                .map(String::valueOf)                                         // convert char to String
+                .collect(Collectors.joining());                               // join all into a single string
+
+        System.out.println("Reversed: " + reversed);
+    }
+}
+
+
+Java Code Using HashMap to Count Character Occurrences:
+import java.util.HashMap;
+import java.util.Map;
+
+public class CharCountUsingMap {
+    public static void main(String[] args) {
+        String message = "I love Java Pragramming and develop applicationn";
+
+        Map<Character, Integer> charCountMap = new HashMap<>();
+
+        for (char c : message.toLowerCase().toCharArray()) {
+            if (Character.isLetter(c)) {  // count only letters, skip spaces/symbols
+                charCountMap.put(c, charCountMap.getOrDefault(c, 0) + 1);
+            }
+        }
+
+        // Print the result
+        for (Map.Entry<Character, Integer> entry : charCountMap.entrySet()) {
+            System.out.println(entry.getKey() + " : " + entry.getValue());
+        }
+    }
+}
