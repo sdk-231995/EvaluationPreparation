@@ -1,0 +1,462 @@
+
+count occurrences of character in string java
+String message ="Hello";
+
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+public class CharCount {
+    public static void main(String[] args) {
+        String message = "Hello";
+
+        Map<Character, Long> charCount = message.chars()               // IntStream of characters
+                .mapToObj(c -> (char) c)                               // Convert int to Character
+                .collect(Collectors.groupingBy(                       // Group by character
+                        Function.identity(),                          // key = character itself
+                        Collectors.counting()                         // value = count
+                ));
+
+        System.out.println(charCount);
+    }
+}
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class CharCountWithoutJava8 {
+    public static void main(String[] args) {
+        String message = "Hello";
+
+        Map<Character, Integer> charCount = new HashMap<>();
+
+        for (char c : message.toCharArray()) {
+            charCount.put(c, charCount.getOrDefault(c, 0) + 1);
+        }
+
+        System.out.println(charCount);
+    }
+}
+
+--------------------------------------------------------------------
+Palindrome number program
+------------------------------------------------------------------
+public class PalindromeNumber {
+    public static void main(String[] args) {
+        int number = 121; // You can change this value
+        int originalNumber = number;
+        int reversedNumber = 0;
+
+        while (number != 0) {
+            int digit = number % 10;                 // Get last digit
+            reversedNumber = reversedNumber * 10 + digit; // Append digit
+            number = number/10;                            // Remove last digit
+        }
+
+        if (originalNumber == reversedNumber) {
+            System.out.println(originalNumber + " is a Palindrome number.");
+        } else {
+            System.out.println(originalNumber + " is NOT a Palindrome number.");
+        }
+    }
+}
+
+public class PalindromeString {
+    public static void main(String[] args) {
+        String str = "madam"; // Change this value
+        String original = str;
+
+        String reversed = "";
+        for (int i = str.length() - 1; i >= 0; i--) {
+            reversed = reversed+str.charAt(i);
+        }
+
+        if (original.equals(reversed)) {
+            System.out.println(original + " is a Palindrome string.");
+        } else {
+            System.out.println(original + " is NOT a Palindrome string.");
+        }
+    }
+}
+
+----------------------------------------------------------------------------------------
+Java Program To Reverse Given String
+-----------------------------------------------------------------------------
+public class ReverseStringBasic {
+    public static void main(String[] args) {
+        String str = "Hello World";
+        String reversed = "";
+
+        for (int i = str.length() - 1; i >= 0; i--) {
+            reversed = reversed + str.charAt(i);
+        }
+
+        System.out.println("Original: " + str);
+        System.out.println("Reversed: " + reversed);
+    }
+}
+
+
+
+public class ReverseStringBuilder {
+    public static void main(String[] args) {
+        String str = "Hello World";
+        String reversed = new StringBuilder(str).reverse().toString();
+
+        System.out.println("Original: " + str);
+        System.out.println("Reversed: " + reversed);
+    }
+}
+
+by using java 8
+---------------------
+public class ReverseStringOneLiner {
+    public static void main(String[] args) {
+        String str = "Hello World";
+
+        String reversed = str.chars()
+                .mapToObj(c -> String.valueOf((char) c))
+                .reduce("", (a, b) -> b + a);
+
+        System.out.println("Original: " + str);
+        System.out.println("Reversed: " + reversed);
+    }
+}
+
+==================================================
+
+Java Program To Remove Special Characters From Given String
+
+public class RemoveSpecialChars {
+    public static void main(String[] args) {
+        String str = "Hello@# World!! 123";
+
+        // Keep only letters, numbers, and spaces
+        String result = str.replaceAll("[^a-zA-Z0-9 ]", "");
+
+        System.out.println("Original: " + str);
+        System.out.println("After removing special characters: " + result);
+    }
+}
+
+Original: Hello@# World!! 123
+After removing special characters: Hello World 123
+
+===========================
+Java 8 Streams 
+---------------------------
+import java.util.stream.Collectors;
+
+public class RemoveSpecialCharsJava8 {
+    public static void main(String[] args) {
+        String str = "Hello@# World!! 123";
+
+        String result = str.chars()
+                .mapToObj(c -> String.valueOf((char) c))
+                .filter(ch -> ch.matches("[a-zA-Z0-9 ]"))
+                .collect(Collectors.joining());
+
+        System.out.println("Original: " + str);
+        System.out.println("After removing special characters: " + result);
+    }
+}
+-----------------------------------------------------------------------------------
+
+Java Program To Remove White Spaces From Given String
+
+
+------------------------------------------------------------------------------------
+
+public class RemoveWhiteSpaces {
+    public static void main(String[] args) {
+        String str = "  Hello   World  123  ";
+
+        // Remove all white spaces
+        String result = str.replaceAll("\\s+", "");
+
+        System.out.println("Original: [" + str + "]");
+        System.out.println("After removing white spaces: [" + result + "]");
+    }
+}
+
+-------------------------------------------------------------------------------
+
+Java Program To Remove Duplicate Characters In String
+
+-----------------------------------------------------------------------------
+
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+public class RemoveDuplicateChars {
+    public static void main(String[] args) {
+        String str = "programming";
+
+        Set<Character> set = new LinkedHashSet<>();
+        for (char c : str.toCharArray()) {
+            set.add(c);
+        }
+
+        StringBuilder result = new StringBuilder();
+        for (char c : set) {
+            result.append(c);
+        }
+
+        System.out.println("Original: " + str);
+        System.out.println("After removing duplicates: " + result);
+    }
+}
+
+-------------------------------
+Java 8 Streams
+---------------------------
+import java.util.stream.Collectors;
+
+public class RemoveDuplicateCharsJava8 {
+    public static void main(String[] args) {
+        String str = "programming";
+
+        String result = str.chars()
+                .mapToObj(c -> String.valueOf((char) c))
+                .distinct()
+                .collect(Collectors.joining());
+
+        System.out.println("Original: " + str);
+        System.out.println("After removing duplicates: " + result);
+    }
+}
+
+-------------------------------------------------------------------------
+Sort String Characters In Alphabetical Order
+----------------------------------------------------------------------------
+import java.util.stream.Collectors;
+
+public class SortStringJava8 {
+    public static void main(String[] args) {
+        String str = "java";
+
+        String sorted = str.chars()
+                .mapToObj(c -> String.valueOf((char) c))
+                .sorted()
+                .collect(Collectors.joining());
+
+        System.out.println("Original: " + str);
+        System.out.println("Sorted: " + sorted);
+    }
+}
+
+Without Java 8
+-----------------------------------------------
+import java.util.Arrays;
+
+public class SortStringBasic {
+    public static void main(String[] args) {
+        String str = "java";
+
+        char[] chars = str.toCharArray();
+        Arrays.sort(chars);
+
+        String sorted = new String(chars);
+
+        System.out.println("Original: " + str);
+        System.out.println("Sorted: " + sorted);
+    }
+	
+}
+
+-------------------------------------------------------------------
+Java Program To Replace Character With It's Occurrence
+--------------------------------------------------------------------
+import java.util.HashMap;
+import java.util.Map;
+
+public class ReplaceCharWithOccurrence {
+    public static void main(String[] args) {
+        String str = "aabbc";
+        StringBuilder result = new StringBuilder();
+
+        Map<Character, Integer> occurrenceMap = new HashMap<>();
+
+        for (char c : str.toCharArray()) {
+            occurrenceMap.put(c, occurrenceMap.getOrDefault(c, 0) + 1);
+            result.append(c).append(occurrenceMap.get(c));
+        }
+
+        System.out.println("Original: " + str);
+        System.out.println("Modified: " + result);
+    }
+}
+
+--------------------------------------------
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+public class ReplaceCharWithOccurrenceJava8 {
+    public static void main(String[] args) {
+        String str = "aabbc";
+        Map<Character, Integer> occurrenceMap = new HashMap<>();
+
+        String result = str.chars()
+                .mapToObj(c -> {
+                    char ch = (char) c;
+                    occurrenceMap.put(ch, occurrenceMap.getOrDefault(ch, 0) + 1);
+                    return "" + ch + occurrenceMap.get(ch);
+                })
+                .collect(Collectors.joining());
+
+        System.out.println("Original: " + str);
+        System.out.println("Modified: " + result);
+    }
+}
+
+
+Java Program To Find First Non Repeated Character
+----------------------------------------------
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+public class FirstNonRepeatedChar {
+    public static void main(String[] args) {
+        String str = "swiss";
+
+        Map<Character, Integer> countMap = new LinkedHashMap<>();
+
+        // Count occurrences
+        for (char c : str.toCharArray()) {
+            countMap.put(c, countMap.getOrDefault(c, 0) + 1);
+        }
+
+        // Find first character with count = 1
+        for (Map.Entry<Character, Integer> entry : countMap.entrySet()) {
+            if (entry.getValue() == 1) {
+                System.out.println("First non-repeated character: " + entry.getKey());
+                return;
+            }
+        }
+
+        System.out.println("No non-repeated character found.");
+    }
+}
+
+
+--------------------------------------------------------------------
+Using Java 8 Streams
+--------------------------------------------------------------------
+
+import java.util.LinkedHashMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+public class FirstNonRepeatedCharJava8 {
+    public static void main(String[] args) {
+        String str = "swiss";
+
+        Character firstNonRepeated = str.chars()
+                .mapToObj(c -> (char) c)
+                .collect(Collectors.groupingBy(Function.identity(), LinkedHashMap::new, Collectors.counting()))
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getValue() == 1)
+                .map(Map.Entry::getKey)
+                .findFirst()
+                .orElse(null);
+
+        if (firstNonRepeated != null) {
+            System.out.println("First non-repeated character: " + firstNonRepeated);
+        } else {
+            System.out.println("No non-repeated character found.");
+        }
+    }
+}
+
+--------------------------------------------------------------------
+Java Program To Find Occurrence Of Each Character 
+--------------------------------------------------------------------
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class CharOccurrences {
+    public static void main(String[] args) {
+        String str = "hello world";
+
+        Map<Character, Integer> countMap = new HashMap<>();
+
+        for (char c : str.toCharArray()) {
+            countMap.put(c, countMap.getOrDefault(c, 0) + 1);
+        }
+
+        System.out.println("Character occurrences: " + countMap);
+    }
+}
+
+--------------------------------------
+Using Java 8 Streams
+------------------------------------
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+public class CharOccurrencesJava8 {
+    public static void main(String[] args) {
+        String str = "hello world";
+
+        Map<Character, Long> countMap = str.chars()
+                .mapToObj(c -> (char) c)
+                .collect(Collectors.groupingBy(
+                        Function.identity(),
+                        Collectors.counting()
+                ));
+
+        System.out.println("Character occurrences: " + countMap);
+    }
+}
+
+
+Reverse Each Word In Given String
+-------------------------------------------------
+
+public class ReverseEachWord {
+    public static void main(String[] args) {
+        String str = "Java is fun";
+        String[] words = str.split(" ");
+        StringBuilder result = new StringBuilder();
+
+        for (String word : words) {
+            String reversedWord = new StringBuilder(word).reverse().toString();
+            result.append(reversedWord).append(" ");
+        }
+
+        System.out.println("Original: " + str);
+        System.out.println("Reversed each word: " + result.toString().trim());
+    }
+}
+
+--------------
+Original: Java is fun
+Reversed each word: avaJ si nuf
+
+=======================================================
+Using Java 8 Streams
+=======================================================
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
+public class ReverseEachWordJava8 {
+    public static void main(String[] args) {
+        String str = "Java is fun";
+
+        String result = Arrays.stream(str.split(" "))
+                .map(word -> new StringBuilder(word).reverse().toString())
+                .collect(Collectors.joining(" "));
+
+        System.out.println("Original: " + str);
+        System.out.println("Reversed each word: " + result);
+    }
+}
+
+
+
+
