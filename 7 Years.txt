@@ -1,0 +1,322 @@
+public class StringTest {
+	public static void main(String[] args) {
+		String s1 = "Java";
+		String s2 = new String("Java");
+		String s3 = "Java";
+		System.out.println(s1 == s2); // false
+		System.out.println(s1.equals(s2)); //true
+		System.out.println(s1.equals(s2));//true
+
+	}
+
+}
+
+        Integer a = 127;
+		Integer b = 127;
+		Integer c = 128;
+		Integer d = 128;
+		ava has a mechanism for caching Integer values in the range of -128 to 127.
+		a == b prints true is because both a and b are within the cache range (127).
+		The cache for Integer objects exists for values between -128 and 127 inclusive. This is a special optimization in the JVM.
+		a == b is true because both a and b point to the same Integer object from the cache
+		
+		System.out.println(a == b);  //true
+		
+		
+		System.out.println(c == d); //false
+		
+		Outside Cache Range:
+		
+		when you write Integer c = 128; and Integer d = 128;, Java will create new objects for both c and d because 128 is outside the cached range.
+
+Therefore, even though both c and d hold the same value (128), they are different objects in memory.
+
+Since == checks for reference equality (whether the two references point to the same object in memory), the comparison c == d returns false.
+c == d is false because c and d are two different Integer objects created for the value 128, and they are not the same reference.
+======================================================================
+class Test {
+	
+	    int value = 10;
+	}
+	public class StringTest {
+	    public static void main(String[] args) {
+	        Test obj = new Test();
+	        change(obj);
+	        System.out.println(obj.value);
+	    }
+	    static void change(Test t) {
+	        t = new Test();
+	        t.value = 20;
+	        System.out.println(t.value);
+	    }
+	}
+
+OutPut
+----------------
+20
+10
+
+================================
+
+public class StringTest {
+    public static void main(String[] args) {
+    	List<String> list = new ArrayList<>();
+    	list.add("A");
+    	list.add("B");
+    	for (String s : list) {
+    	    if ("B".equals(s)) {
+    	        list.remove(s);
+    	    }
+    	}
+    }
+}
+
+
+============================================================
+
+Exception in thread "main" java.util.ConcurrentModificationException
+
+---------------------------------------------------------------------
+
+class Key {
+    int id;
+    Key(int id) { this.id = id; }
+	@Override
+	public String toString() {
+		return "Key [id=" + id + "]";
+	}
+    
+    
+}
+
+public class StringTest {
+    public static void main(String[] args) {
+        Map<Key, String> map = new HashMap<>();
+        map.put(new Key(1), "One");
+        map.put(new Key(1), "Two");
+        System.out.println(map.size());
+        Set<Entry<Key, String>> entrySet = map.entrySet();
+        
+        for(Entry<Key, String> es:entrySet) {
+        	System.out.println(es.getKey() +" "+es.getValue());
+        }
+        
+    }
+}
+
+OutPut
+-----------------
+2
+Key [id=1] One
+Key [id=1] Two
+----------------------
+
+public class StringTest {
+    public static void main(String[] args) {
+      
+        Map<Integer, String> map = new HashMap<>();
+        map.put(127, "A");
+        map.put(127, "B");
+        map.put(128, "C");
+        map.put(128, "D");
+        System.out.println(map.size());
+       Set<Entry<Integer, String>> entrySet = map.entrySet();
+        
+        for(Entry<Integer, String> es:entrySet) {
+        	System.out.println(es.getKey() +" "+es.getValue());
+        }
+        
+    }
+}
+
+=======================================
+
+2
+128 D
+127 B
+
+=========================
+
+CopyOnWriteArrayList<String>();
+
+Common Example That Throws ConcurrentModificationException:
+List<String> list = new ArrayList<>();
+list.add("A");
+list.add("B");
+list.add("C");
+
+for (String item : list) {
+    if (item.equals("B")) {
+        list.remove(item);  // ❌ Modifying the list during iteration
+    }
+}
+
+
+Use CopyOnWriteArrayList (Thread-safe Alternative)
+
+If your use case is read-heavy and write-light, use CopyOnWriteArrayList.
+
+List<String> list = new CopyOnWriteArrayList<>();
+list.add("A");
+list.add("B");
+list.add("C");
+
+for (String item : list) {
+    if (item.equals("B")) {
+        list.remove(item);  // ✅ Safe in CopyOnWriteArrayList
+    }
+}
+
+
+For Concurrent Maps and Sets
+
+Use ConcurrentHashMap or ConcurrentSkipListSet when working with maps and sets in concurrent environments.
+
+Map<String, String> map = new ConcurrentHashMap<>();
+map.put("key1", "value1");
+map.put("key2", "value2");
+
+for (String key : map.keySet()) {
+    if (key.equals("key1")) {
+        map.remove(key);  // ✅ No exception with ConcurrentHashMap
+    }
+}
+
+-------------------------------------
+
+Map<String, String> map = Collections.synchronizedMap(new HashMap<>());
+    	map.put("A", "1");
+    	map.put("B", "2");
+
+    	for (String k : map.keySet()) {
+    	    map.put("C", "3");
+    	}
+
+
+Exception in thread "main" java.util.ConcurrentModificationException
+
+------------------------------------------
+
+Map<Integer, String> map = new HashMap<>();
+    	map.put(1, "A");
+    	map.put(2, "B");
+    	map.put(3, "C");
+
+    	for (Iterator<Integer> it = map.keySet().iterator(); it.hasNext();) {
+    	    Integer key = it.next();
+    	    if (key == 2) {
+    	        map.remove(key);
+    	    }
+    	}
+		==========================================
+		Exception in thread "main" java.util.ConcurrentModificationException
+
+
+Use Iterator with remove() Method
+
+Use the iterator's own remove() method instead of modifying the collection directly.
+
+Iterator<String> iterator = list.iterator();
+while (iterator.hasNext()) {
+    String item = iterator.next();
+    if (item.equals("B")) {
+        iterator.remove();  // ✅ Safe removal
+    }
+}
+
+
+
+-----------------------------------------------------------------------------
+Given a list of words, count the occurrences of each word (case-insensitive).
+
+List<String> words = Arrays.asList("Java", "is", "Java", "Stream", "is", "fun");
+Output → {java=2, is=2, stream=1, fun=1}
+
+Map<String, Long> freq = words.stream()
+    .map(String::toLowerCase)
+    .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+
+------------------------------------------------------------------------------------
+
+Given a list of integers, return the top 3 most frequent numbers in descending order of frequency
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class FrequencySort {
+    public static void main(String[] args) {
+        List<Integer> nums = Arrays.asList(1,1,2,3,3,3,4,4,4,4,5);
+
+        // Count frequency using a HashMap
+        Map<Integer, Long> freqMap = nums.stream()
+            .collect(Collectors.groupingBy(n -> n, Collectors.counting()));
+
+        // Sort the map entries by value (frequency) descending
+        List<Integer> result = freqMap.entrySet().stream()
+            .sorted((e1, e2) -> Long.compare(e2.getValue(), e1.getValue()))
+            .map(Map.Entry::getKey)
+            .limit(3)  // get top 3 frequent elements
+            .collect(Collectors.toList());
+
+        System.out.println(result);
+    }
+}
+
+
+OutPut
+=========
+[4, 3, 1]
+
+------------------------------
+Partition a list of integers into evens and odds.
+List<Integer> nums = Arrays.asList(1, 2, 3, 4, 5);
+Output → {false=[1, 3, 5], true=[2, 4]}
+
+
+Map<Boolean, List<Integer>> partitioned = nums.stream()
+    .collect(Collectors.partitioningBy(n -> n % 2 == 0));
+----------------------------------------------------------------
+
+Merge two lists of integers into one list with no duplicates, sorted in ascending order.
+
+import java.util.*;
+import java.util.stream.*;
+
+public class MergeLists {
+    public static void main(String[] args) {
+        List<Integer> list1 = Arrays.asList(3, 1, 4, 2, 5);
+        List<Integer> list2 = Arrays.asList(6, 3, 7, 2, 8);
+
+        List<Integer> mergedSortedUnique = Stream.concat(list1.stream(), list2.stream())
+            .distinct()
+            .sorted()
+            .collect(Collectors.toList());
+
+        System.out.println(mergedSortedUnique);
+    }
+}
+-----------------------------------------------
+
+Given a list of lists of integers, flatten it into a single list sorted ascending.
+
+import java.util.*;
+import java.util.stream.*;
+
+public class FlattenWithLambda {
+    public static void main(String[] args) {
+        List<List<Integer>> nested = Arrays.asList(
+            Arrays.asList(3, 2),
+            Arrays.asList(1, 4)
+        );
+
+        List<Integer> flatSorted = nested.stream()
+            .flatMap(list -> list.stream())  // Lambda equivalent of List::stream
+            .sorted()
+            .collect(Collectors.toList());
+
+        System.out.println(flatSorted);
+    }
+}
+
+
